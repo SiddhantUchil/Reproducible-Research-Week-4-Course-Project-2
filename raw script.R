@@ -3,6 +3,10 @@ library(tidyr)
 library(reshape2)
 library(ggplot2)
 
+if(!file.exists("Storm data.csv.bz2")){
+  url <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"
+  download.file(url, "Storm data.csv.bz2", method = "curl", mode = "wd")
+}
 a = read.csv("repdata_data_StormData.csv")
 str(a)
 
@@ -99,7 +103,7 @@ TOP.popuDMG.byEVENT = melt(data = TOP.popuDMG.byEVENT, id.vars = "EVENT", variab
 
 g = ggplot(data = TOP.popuDMG.byEVENT, aes(x = reorder(EVENT, -COUNT), y = COUNT))
 g + geom_bar(stat = "identity", aes(fill = MISHAPS ), position = "dodge") +
-  labs(title = "Top 10 most harmful events for population health", x = "Event", y = "COUNT") +
+  labs(title = "Top 10 most harmful events for humans", x = "Event", y = "COUNT") +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
   scale_fill_discrete(name = "MISHAPS", labels = c("Fatalities", "Injuries", "Total"))
 
