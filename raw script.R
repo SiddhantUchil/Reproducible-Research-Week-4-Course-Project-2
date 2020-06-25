@@ -1,3 +1,8 @@
+library(dplyr)
+library(tidyr)
+library(reshape2)
+library(ggplot2)
+
 a = read.csv("repdata_data_StormData.csv")
 str(a)
 
@@ -73,9 +78,7 @@ d = c
 
 d$PROPDMG = d$PROPDMG * d$PROPDMGEXP
 d$CROPDMG = d$CROPDMG * d$CROPDMGEXP
-d$POPUDMG = d$FATALITIES + d$INJURIES
 
-str(d)
 
 
 popuDMG.byEVENT = aggregate(d[, c(2, 3)], by = list(EVENT = d$EVTYPE), FUN = sum)
@@ -93,5 +96,21 @@ TOP.econDMG.byEVENT = head(econDMG.byEVENT, 10)
 TOP.econDMG.byEVENT = melt(data = TOP.econDMG.byEVENT, id.vars = "EVENT", variable.name = "DAMAGE", value.name = "VALUE")
 TOP.popuDMG.byEVENT = melt(data = TOP.popuDMG.byEVENT, id.vars = "EVENT", variable.name = "MISHAPS", value.name = "COUNT")
 
+
+g = ggplot(data = TOP.popuDMG.byEVENT, aes(x = reorder(EVENT, -COUNT), y = COUNT))
+g + geom_bar(stat = "identity", aes(fill = MISHAPS ), position = "dodge") +
+  labs(title = "Top 10 most harmful events for population health", x = "Event", y = "COUNT") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+  scale_fill_discrete(name = "MISHAPS", labels = c("Fatalities", "Injuries", "Total"))
+
+
+h = ggplot(TOP.econDMG.byEVENT, aes(x = reorder(EVENT, -VALUE), y = VALUE))
+h + geom_bar(stat = "identity", aes(fill = DAMAGE), position = "dodge") +
+  labs(title = "Top 10 most harmful events for economy", x = "Event", y = "Value") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+  scale_fill_discrete(name = "Damage", labels = c("Property Damage", "Crop Damage", "Total"))
+
+
+?scale_fill_discrete
 popudmg.TOTAL = aggregate(d$FATALITIES + d$INJURIES ~ d$EVTYPE, data = d, FUN = sum)
 parse_date_time(gsub('^(?=.{6,7}$)', '0', perl=T, gsub('^\\d\\K(?!\\d{6})', '0', x, perl=T)), 'mdy')
