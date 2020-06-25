@@ -1,13 +1,13 @@
 # Analyzing which weather events are the most dangerous with respect to the human life and the economy
 
 
-## Synopsis
+## SYNOPSIS
 
 
 ### The study conducted by the United States National Oceanic and Atmospheric Administration analyzes data collected from 1950 to 2011 about the damages caused to property, crops and human life (both fatalities and injuries)
 
 
-## Data Processing
+## DATA PROCESSING
 
 
 ### We first load the necessary libraries needed for the analysis
@@ -200,6 +200,8 @@ TOP.popuDMG.byEVENT = melt(data = TOP.popuDMG.byEVENT, id.vars = "EVENT", variab
 ```
 
 
+## RESULTS
+
 ### Now we plot our data
 
 
@@ -227,32 +229,4 @@ include_graphics("top 10 for economy.png")
 ```
 
 
-##Based on these plots we can say that over time the most harmful weather events for the humans was Tornado while the most harmful event for the economy was the Flood
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+## Based on these plots we can say that over time the most harmful weather events for the humans was Tornado while the most harmful event for the economy was the Flood
